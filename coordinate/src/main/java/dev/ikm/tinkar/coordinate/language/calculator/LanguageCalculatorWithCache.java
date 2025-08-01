@@ -153,10 +153,8 @@ public class LanguageCalculatorWithCache implements LanguageCalculator {
 
     @Override
     public Optional<String> getDescriptionTextForComponentOfType(int entityNid, int descriptionTypeNid) {
-        for (SemanticEntityVersion version : getDescriptionsForComponentOfType(entityNid, descriptionTypeNid)) {
-            return getTextFromSemanticVersion(version);
-        }
-        return Optional.empty();
+        ImmutableList<SemanticEntityVersion> versions = getDescriptionsForComponentOfType(entityNid, descriptionTypeNid);
+        return (versions.isEmpty()) ? Optional.empty() : getTextFromSemanticVersion(versions.get(0));
     }
 
     @Override
@@ -170,17 +168,20 @@ public class LanguageCalculatorWithCache implements LanguageCalculator {
                 if (optionalTypeIndex.isPresent()) {
                     PrimitiveData.get().forEachSemanticNidForComponentOfPattern(componentNid, descriptionPatternNid,
                             semanticNid -> {
-                                SemanticEntity descriptionSemantic = Entity.getFast(semanticNid);
-                                Latest<SemanticEntityVersion> latestDescriptionVersion =
-                                        stampCalculator.latest(descriptionSemantic);
-                                latestDescriptionVersion.ifPresent(descriptionVersion -> {
-                                    Object fieldValue = descriptionVersion.fieldValues().get(optionalTypeIndex.getAsInt());
-                                    if (fieldValue instanceof EntityFacade entityFacade) {
-                                        if (entityFacade.nid() == descriptionTypeNid) {
-                                            descriptionList.add(descriptionVersion);
-                                        }
-                                    }
-                                });
+                                //SemanticEntity descriptionSemantic = Entity.getFast(semanticNid);
+                                Latest<SemanticEntityVersion> latestDescriptionVersion  = getFullyQualifiedDescription(getDescriptionsForComponent(componentNid));
+                                       // stampCalculator.latest(descriptionSemantic);
+                                if (latestDescriptionVersion.isPresent()) {
+                                    descriptionList.add(latestDescriptionVersion.get());
+                                }
+//                                latestDescriptionVersion.ifPresent(descriptionVersion -> {
+//                                    Object fieldValue = descriptionVersion.fieldValues().get(optionalTypeIndex.getAsInt());
+//                                    if (fieldValue instanceof EntityFacade entityFacade) {
+//                                        if (entityFacade.nid() == descriptionTypeNid) {
+//                                            descriptionList.add(descriptionVersion);
+//                                        }
+//                                    }
+//                                });
 
                             });
                 }
