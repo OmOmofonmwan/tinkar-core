@@ -92,6 +92,11 @@ public class NavigationCalculatorWithCache implements NavigationCalculator {
     }
 
     @Override
+    public String extractText(Latest<SemanticEntityVersion> latestDescription) {
+        return this.languageCalculator.extractText(latestDescription);
+    }
+
+    @Override
     public LanguageCalculator languageCalculator() {
         return languageCalculator;
     }

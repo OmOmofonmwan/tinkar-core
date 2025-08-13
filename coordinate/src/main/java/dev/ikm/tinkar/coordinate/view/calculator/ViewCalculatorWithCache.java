@@ -27,10 +27,12 @@ import dev.ikm.tinkar.coordinate.logic.calculator.LogicCalculatorWithCache;
 import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculator;
 import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculatorDelegate;
 import dev.ikm.tinkar.coordinate.navigation.calculator.NavigationCalculatorWithCache;
+import dev.ikm.tinkar.coordinate.stamp.calculator.Latest;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculatorDelegate;
 import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculatorWithCache;
 import dev.ikm.tinkar.coordinate.view.ViewCoordinateRecord;
+import dev.ikm.tinkar.entity.SemanticEntityVersion;
 import org.eclipse.collections.api.list.ImmutableList;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -90,6 +92,11 @@ public class ViewCalculatorWithCache implements ViewCalculator, StampCalculatorD
     @Override
     public ImmutableList<LanguageCoordinateRecord> languageCoordinateList() {
         return this.languageCalculator.languageCoordinateList();
+    }
+
+    @Override
+    public String extractText(Latest<SemanticEntityVersion> latestDescription) {
+        return this.languageCalculator.extractText(latestDescription);
     }
 
     @Override

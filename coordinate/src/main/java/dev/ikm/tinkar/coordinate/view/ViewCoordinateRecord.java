@@ -30,6 +30,8 @@ import dev.ikm.tinkar.coordinate.logic.LogicCoordinateRecord;
 import dev.ikm.tinkar.coordinate.navigation.NavigationCoordinate;
 import dev.ikm.tinkar.coordinate.navigation.NavigationCoordinateRecord;
 import dev.ikm.tinkar.coordinate.stamp.StampCoordinateRecord;
+import dev.ikm.tinkar.coordinate.stamp.calculator.Latest;
+import dev.ikm.tinkar.entity.SemanticEntityVersion;
 import io.soabase.recordbuilder.core.RecordBuilder;
 import org.eclipse.collections.api.factory.Lists;
 import org.eclipse.collections.api.list.ImmutableList;
@@ -121,5 +123,10 @@ public record ViewCoordinateRecord(StampCoordinateRecord stampCoordinate,
         logicCoordinate.encode(out);
         navigationCoordinate.encode(out);
         editCoordinate.encode(out);
+    }
+
+    @Override
+    public String extractText(Latest<SemanticEntityVersion> latestDescription) {
+        return languageCalculator().extractText(latestDescription);
     }
 }

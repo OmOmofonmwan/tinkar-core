@@ -23,11 +23,8 @@ import dev.ikm.tinkar.common.util.time.DateTimeUtil;
 import dev.ikm.tinkar.coordinate.language.LanguageCoordinate;
 import dev.ikm.tinkar.coordinate.language.LanguageCoordinateRecord;
 import dev.ikm.tinkar.coordinate.stamp.calculator.Latest;
-import dev.ikm.tinkar.entity.Entity;
-import dev.ikm.tinkar.entity.SemanticEntity;
-import dev.ikm.tinkar.entity.SemanticEntityVersion;
-import dev.ikm.tinkar.entity.StampEntity;
-import dev.ikm.tinkar.entity.StampVersion;
+import dev.ikm.tinkar.coordinate.stamp.calculator.StampCalculator;
+import dev.ikm.tinkar.entity.*;
 import dev.ikm.tinkar.terms.ConceptFacade;
 import dev.ikm.tinkar.terms.EntityFacade;
 import dev.ikm.tinkar.terms.EntityProxy;
@@ -163,8 +160,11 @@ public interface LanguageCalculator {
      * @return an Optional containing the fully qualified name text if available; otherwise, an empty Optional
      */
     default Optional<String> getFullyQualifiedNameText(int componentNid) {
-        return getDescriptionTextForComponentOfType(componentNid, TinkarTerm.FULLY_QUALIFIED_NAME_DESCRIPTION_TYPE.nid());
+        Latest<SemanticEntityVersion> latestDescription = getFullyQualifiedDescription(getDescriptionsForComponent(componentNid));
+        return latestDescription.isPresent() ? Optional.of(extractText(latestDescription)) : Optional.empty();
     }
+
+     String extractText(Latest<SemanticEntityVersion> latestDescription);
 
     /**
      * Retrieves the semantic text for a given unique identifier.

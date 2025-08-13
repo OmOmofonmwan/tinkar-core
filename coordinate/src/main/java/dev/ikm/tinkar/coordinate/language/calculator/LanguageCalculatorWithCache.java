@@ -350,7 +350,7 @@ public class LanguageCalculatorWithCache implements LanguageCalculator {
 
     }
 
-    private String extractText(Latest<SemanticEntityVersion> latestDescription) {
+    public String extractText(Latest<SemanticEntityVersion> latestDescription) {
         SemanticEntityVersion descriptionVersion = latestDescription.get();
         PatternEntity<PatternEntityVersion> pattern = descriptionVersion.pattern();
         PatternEntityVersion patternVersion = stampCalculator.latest(pattern).get();
@@ -358,17 +358,17 @@ public class LanguageCalculatorWithCache implements LanguageCalculator {
         return descriptionText;
     }
 
-    @Override
-    public Optional<String> getFullyQualifiedNameText(int componentNid) {
-        return Optional.ofNullable(fqnCache.get(componentNid, nid -> {
-            Latest<SemanticEntityVersion> latestDescription
-                    = getFullyQualifiedDescription(getDescriptionsForComponent(componentNid));
-            if (latestDescription.isPresent()) {
-                return extractText(latestDescription);
-            }
-            return null;
-        }));
-    }
+//    @Override
+//    public Optional<String> getFullyQualifiedNameText(int componentNid) {
+//        return Optional.ofNullable(fqnCache.get(componentNid, nid -> {
+//            Latest<SemanticEntityVersion> latestDescription
+//                    = getFullyQualifiedDescription(getDescriptionsForComponent(componentNid));
+//            if (latestDescription.isPresent()) {
+//                return extractText(latestDescription);
+//            }
+//            return null;
+//        }));
+//    }
 
     @Override
     public Optional<String> getDefinitionDescriptionText(int componentNid) {
